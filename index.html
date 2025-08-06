@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Betting Insights</title>
+    <style>
+        /* CSS styles will be injected by JavaScript */
+    </style>
+</head>
+<body>
+    <div id="app-root"></div>
+    <script>
+        // Prevent right-click and text selection
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+
+        // CSS Styles
+        const styles = `
+        :root {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --accent-primary: #002855;
+            --accent-secondary: #FFA726;
+            --vs-color: #FFA726;
+            --won-color: #4CAF50;
+            --lost-color: #F44336;
+            --pending-color: #FFA726;
+            --card-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            --card-border: 1px solid #eaeaea;
+            --stats-bg: #f0f4f8;
+            --coupon-bg: #f8f9fa;
+        }
+
+        .dark-mode {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #bbbbbb;
+            --accent-primary: #4fc3f7;
+            --accent-secondary: #ff7043;
+            --vs-color: #ff7043;
+            --won-color: #81c784;
+            --lost-color: #e57373;
+            --pending-color: #ffb74d;
+            --card-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            --card-border: 1px solid #333333;
+            --stats-bg: #2d2d2d;
+            --coupon-bg: #252525;
+        }
+
+        .neon-mode {
+            --bg-primary: #0a0a1a;
+            --bg-secondary: #14142a;
+            --text-primary: #e0e0ff;
+            --text-secondary: #a0a0c0;
+            --accent-primary: #00f0ff;
+            --accent-secondary: #ff00aa;
+            --vs-color: #ff00aa;
+            --won-color: #00ff88;
+            --lost-color: #ff5555;
+            --pending-color: #ffcc00;
+            --card-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+            --card-border: 1px solid #30305a;
+            --stats-bg: #1a1a3a;
+            --coupon-bg: #1e1e3a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 5px;
+            border-radius: 20px;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .theme-btn {
+            background: none;
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .theme-btn.active {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .time-container {
+            background: var(--stats-bg);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: var(--stats-bg);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 20px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            color: var(--accent-primary);
+            font-size: 16px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .coupon-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .coupon-card {
+            background: var(--coupon-bg);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: var(--card-shadow);
+            border: var(--card-border);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .coupon-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--card-border);
+            cursor: pointer;
+        }
+
+        .coupon-date {
+            font-weight: 600;
+            color: var(--accent-primary);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .clown-king-icon {
+            color: var(--accent-secondary);
+            font-size: 24px;
+            animation: shake 2s infinite, pulse 1.5s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(-5deg); }
+            20%, 40%, 60%, 80% { transform: rotate(5deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .coupon-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .status-won {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: var(--won-color);
+        }
+
+        .status-lost {
+            background-color: rgba(244, 67, 54, 0.2);
+            color: var(--lost-color);
+        }
+
+        .status-pending {
+            background-color: rgba(255, 167, 38, 0.2);
+            color: var(--pending-color);
+        }
+
+        .coupon-odds {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .odds-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .odds-value {
+            font-weight: 700;
+            color: var(--accent-primary);
+            font-size: 18px;
+        }
+
+        .coupon-matches {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .coupon-matches.expanded {
+            max-height: 1000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .match-item {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--card-border);
+        }
+
+        .match-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .team-name {
+            flex: 1;
+            text-align: center;
+        }
+
+        .team-home {
+            text-align: right;
+        }
+
+        .team-away {
+            text-align: left;
+        }
+
+        .vs {
+            color: var(--vs-color);
+            font-weight: bold;
+            margin: 0 10px;
+            font-size: 14px;
+        }
+
+        .match-pick {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .pick-label {
+            color: var(--text-secondary);
+        }
+
+        .pick-value {
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+
+        .coupon-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid var(--card-border);
+            font-size: 14px;
+        }
+
+        .coupon-result {
+            font-weight: 600;
+        }
+
+        .result-won {
+            color: var(--won-color);
+        }
+
+        .result-lost {
+            color: var(--lost-color);
+        }
+
+        .result-pending {
+            color: var(--pending-color);
+        }
+
+        .view-matches {
+            color: var(--accent-primary);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .view-matches i {
+            transition: transform 0.3s ease;
+        }
+
+        .view-matches.expanded i {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 600px) {
+            .theme-toggle {
+                right: 5px;
+                padding: 8px 4px;
+            }
+            
+            .theme-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+            
+            .team-name {
+                font-size: 13px;
+            }
+            
+            .vs {
+                margin: 0 5px;
+            }
+            
+            .coupon-date {
+                font-size: 14px;
+            }
+            
+            .clown-king-icon {
+                font-size: 20px;
+            }
+        }`;
+
+        // Inject styles
+        const styleElement = document.createElement('style');
+        styleElement.textContent = styles;
+        document.head.appendChild(styleElement);
+
+        // Load fonts dynamically
+        const link1 = document.createElement('link');
+        link1.rel = 'preconnect';
+        link1.href = 'https://fonts.googleapis.com';
+        document.head.appendChild(link1);
+
+        const link2 = document.createElement('link');
+        link2.rel = 'preconnect';
+        link2.href = 'https://fonts.gstatic.com';
+        link2.crossOrigin = 'anonymous';
+        document.head.appendChild(link2);
+
+        const link3 = document.createElement('link');
+        link3.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
+        link3.rel = 'stylesheet';
+        document.head.appendChild(link3);
+
+        const link4 = document.createElement('link');
+        link4.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css';
+        link4.rel = 'stylesheet';
+        document.head.appendChild(link4);
+
+        // App content
+        const appContent = `
+        <div class="theme-toggle">
+            <button class="theme-btn active" data-theme="light"><i class="fas fa-sun"></i></button>
+            <button class="theme-btn" data-theme="dark"><i class="fas fa-moon"></i></button>
+            <button class="theme-btn" data-theme="neon"><i class="fas fa-lightbulb"></i></button>
+        </div>
+
+        <div class="container">
+            <header>
+                <h1>Premium Betting Insights</h1>
+                <p class="subtitle">Match Coupons & Results</p>
+            </header>
+
+            <div class="time-container">
+                <p id="current-date"></p>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">87%</div>
+                    <div class="stat-label">Win Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">6.5%</div>
+                    <div class="stat-label">ROI</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">14</div>
+                    <div class="stat-label">Win Streak</div>
+                </div>
+            </div>
+
+            <div class="coupon-container" id="coupons-container">
+                <!-- Coupons will be inserted here by JavaScript -->
+            </div>
+        </div>`;
+
+        document.getElementById('app-root').innerHTML = appContent;
+
+        // Current date
+        function updateDate() {
+            const now = new Date();
+            document.getElementById('current-date').textContent = now.toLocaleDateString('en-GB', { 
+                weekday: 'long', 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+        }
+        
+        updateDate();
+
+        // Theme switching
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelector('.theme-btn.active').classList.remove('active');
+                this.classList.add('active');
+                
+                document.body.className = this.dataset.theme + '-mode';
+                localStorage.setItem('theme', this.dataset.theme);
+            });
+        });
+
+        // Set saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.querySelector(`.theme-btn[data-theme="${savedTheme}"]`).classList.add('active');
+        document.body.className = savedTheme + '-mode';
+
+        // Match data grouped by date
+        const matchesByDate = {
+            "05-08-2025": {
+                status: "won",
+                result: "won",
+                matches: [
+                    { team1: "Santos FC SP", team2: "Juventude", pick: "1X", odd: "1.50" },
+                    { team1: "Accrington Stanley", team2: "Oldham Athletic", pick: "Over 2", odd: "1.80" },
+                    { team1: "Alianza Universidad", team2: "Universitario Deportes", pick: "X2", odd: "1.40" },
+                    { team1: "FCB Melgar", team2: "Juan Pablo", pick: "1X", odd: "1.30" }
+                ]
+            },
+            "04-08-2025": {
+                status: "won",
+                result: "Won",
+                matches: [
+                    { team1: "Rapid Bucuresti", team2: "FC Botosani", pick: "1X", odd: "1.40" },
+                    { team1: "Oriente Petrolero", team2: "Club Aurora", pick: "Over 1.5", odd: "1.50" },
+                    { team1: "Always Ready", team2: "CA Nacional Potosi", pick: "1X", odd: "1.35" },
+                    { team1: "Tampereen IIves", team2: "IF Gnistan", pick: "Over 1.5", odd: "1.60" }
+                ]
+            },
+            "03-08-2025": {
+                status: "won",
+                result: "Won",
+                matches: [
+                    { team1: "EC Vitoria BA", team2: "SE Palmeiras EC", pick: "X2", odd: "1.30" },
+                    { team1: "Union Saint Gilloise", team2: "Oud Heverlee Leuven", pick: "Over 1.5", odd: "1.45" },
+                    { team1: "Royal Charleroi SC", team2: "SC Truiden", pick: "Over 1.5", odd: "1.50" },
+                    { team1: "SP Rapid Wein", team2: "Blau Weiss Linz", pick: "1X", odd: "1.40" }
+                ]
+            },
+            "02-08-2025": {
+                status: "won",
+                result: "Won",
+                matches: [
+                    { team1: "Motherwell FC", team2: "Rangers", pick: "Over 1.5", odd: "1.35" },
+                    { team1: "Yunnan Yukun", team2: "Shanghai Shenhua", pick: "X2", odd: "1.30" },
+                    { team1: "Meizhou Hakka", team2: "Shanghai Port FC", pick: "X2", odd: "1.40" },
+                    { team1: "IFK Varnamo", team2: "GAIS", pick: "Over 1.5", odd: "1.55" }
+                ]
+            },
+            "01-08-2025": {
+                status: "lost",
+                result: "Lost (1/4)",
+                matches: [
+                    { team1: "Club Do Remo", team2: "Ferroviaria SP", pick: "1X", odd: "1.45" },
+                    { team1: "FC Farul Constanta", team2: "Metaloglobus Bucuresti", pick: "Home Win Either Half", odd: "1.70" },
+                    { team1: "Cubh Ramblers", team2: "Lonford Town", pick: "1X", odd: "1.35" },
+                    { team1: "FC Rukh Lviv", team2: "SC Poltava", pick: "Under 3.5", odd: "1.40" }
+                ]
+            }
+        };
+
+        // Function to calculate combined odds (minimum 4.00)
+        function calculateCombinedOdds(matches) {
+            let combinedOdds = 1;
+            matches.forEach(match => {
+                combinedOdds *= parseFloat(match.odd) || 1.5;
+            });
+            // Ensure minimum odds of 4.00
+            return Math.max(combinedOdds, 4.00).toFixed(2);
+        }
+
+        // Function to create coupon cards
+        function createCouponCards() {
+            const container = document.getElementById('coupons-container');
+            
+            Object.entries(matchesByDate).forEach(([date, couponData]) => {
+                const combinedOdds = calculateCombinedOdds(couponData.matches);
+                
+                const coupon = document.createElement('div');
+                coupon.className = 'coupon-card';
+                
+                coupon.innerHTML = `
+                    <div class="coupon-header">
+                        <div class="coupon-date">
+                            <i class="fas fa-crown clown-king-icon"></i>
+                            ${date}
+                        </div>
+                        <div class="coupon-status status-${couponData.status}">
+                            ${couponData.status === 'won' ? 'Won' : 
+                              couponData.status === 'lost' ? 'Lost' : 'Pending'}
+                        </div>
+                    </div>
+                    
+                    <div class="coupon-odds">
+                        <div class="odds-label">Combined Odds</div>
+                        <div class="odds-value">${combinedOdds}</div>
+                    </div>
+                    
+                    <div class="view-matches">
+                        <span>View Matches</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    
+                    <div class="coupon-matches">
+                        ${couponData.matches.map(match => `
+                            <div class="match-item">
+                                <div class="match-teams">
+                                    <div class="team-name team-home">${match.team1}</div>
+                                    <div class="vs">vs</div>
+                                    <div class="team-name team-away">${match.team2}</div>
+                                </div>
+                                <div class="match-pick">
+                                    <div class="pick-label">Pick:</div>
+                                    <div class="pick-value">${match.pick} @ ${match.odd}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="coupon-footer">
+                        <div class="coupon-result result-${couponData.status}">
+                            ${couponData.result}
+                            ${couponData.status === 'won' ? '<i class="fas fa-check"></i>' : ''}
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(coupon);
+                
+                // Add click event to toggle matches visibility
+                const header = coupon.querySelector('.coupon-header');
+                const viewMatches = coupon.querySelector('.view-matches');
+                const matchesSection = coupon.querySelector('.coupon-matches');
+                
+                const toggleMatches = () => {
+                    matchesSection.classList.toggle('expanded');
+                    viewMatches.classList.toggle('expanded');
+                };
+                
+                header.addEventListener('click', toggleMatches);
+                viewMatches.addEventListener('click', toggleMatches);
+            });
+        }
+
+        // Initialize the page
+        createCouponCards();
+    </script>
+</body>
+</html>
