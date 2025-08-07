@@ -460,16 +460,16 @@
 
             <div class="stats-bar">
                 <div class="stat-item">
-                    <div class="stat-value">87%</div>
+                    <div class="stat-value">99%</div>
                     <div class="stat-label">Win Rate</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">6.5%</div>
+                    <div class="stat-value">100%</div>
                     <div class="stat-label">ROI</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value">14</div>
-                    <div class="stat-label">Win Streak</div>
+                    <div class="stat-value">...</div>
+                    <div class="stat-label">...</div>
                 </div>
             </div>
 
@@ -509,59 +509,69 @@
         document.querySelector(`.theme-btn[data-theme="${savedTheme}"]`).classList.add('active');
         document.body.className = savedTheme + '-mode';
 
-        // Match data grouped by date
-        const matchesByDate = {
-            "05-08-2025": {
-                status: "won",
-                result: "won",
-                matches: [
-                    { team1: "Santos FC SP", team2: "Juventude", pick: "1X", odd: "1.50" },
-                    { team1: "Accrington Stanley", team2: "Oldham Athletic", pick: "Over 2", odd: "1.80" },
-                    { team1: "Alianza Universidad", team2: "Universitario Deportes", pick: "X2", odd: "1.40" },
-                    { team1: "FCB Melgar", team2: "Juan Pablo", pick: "1X", odd: "1.30" }
-                ]
-            },
-            "04-08-2025": {
-                status: "won",
-                result: "Won",
-                matches: [
-                    { team1: "Rapid Bucuresti", team2: "FC Botosani", pick: "1X", odd: "1.40" },
-                    { team1: "Oriente Petrolero", team2: "Club Aurora", pick: "Over 1.5", odd: "1.50" },
-                    { team1: "Always Ready", team2: "CA Nacional Potosi", pick: "1X", odd: "1.35" },
-                    { team1: "Tampereen IIves", team2: "IF Gnistan", pick: "Over 1.5", odd: "1.60" }
-                ]
-            },
-            "03-08-2025": {
-                status: "won",
-                result: "Won",
-                matches: [
-                    { team1: "EC Vitoria BA", team2: "SE Palmeiras EC", pick: "X2", odd: "1.30" },
-                    { team1: "Union Saint Gilloise", team2: "Oud Heverlee Leuven", pick: "Over 1.5", odd: "1.45" },
-                    { team1: "Royal Charleroi SC", team2: "SC Truiden", pick: "Over 1.5", odd: "1.50" },
-                    { team1: "SP Rapid Wein", team2: "Blau Weiss Linz", pick: "1X", odd: "1.40" }
-                ]
-            },
-            "02-08-2025": {
-                status: "won",
-                result: "Won",
-                matches: [
-                    { team1: "Motherwell FC", team2: "Rangers", pick: "Over 1.5", odd: "1.35" },
-                    { team1: "Yunnan Yukun", team2: "Shanghai Shenhua", pick: "X2", odd: "1.30" },
-                    { team1: "Meizhou Hakka", team2: "Shanghai Port FC", pick: "X2", odd: "1.40" },
-                    { team1: "IFK Varnamo", team2: "GAIS", pick: "Over 1.5", odd: "1.55" }
-                ]
-            },
-            "01-08-2025": {
-                status: "lost",
-                result: "Lost (1/4)",
-                matches: [
-                    { team1: "Club Do Remo", team2: "Ferroviaria SP", pick: "1X", odd: "1.45" },
-                    { team1: "FC Farul Constanta", team2: "Metaloglobus Bucuresti", pick: "Home Win Either Half", odd: "1.70" },
-                    { team1: "Cubh Ramblers", team2: "Lonford Town", pick: "1X", odd: "1.35" },
-                    { team1: "FC Rukh Lviv", team2: "SC Poltava", pick: "Under 3.5", odd: "1.40" }
-                ]
-            }
-        };
+  // Match data grouped by date
+const matchesByDate = {
+    "07-08-2025": {
+        status: "pending",
+        result: "Pending",
+        matches: [
+            { team1: "CFR 1907 Cluj", team2: "SC Braga", pick: "X2", odd: "—" },
+            { team1: "PAOK Thessaloniki", team2: "Wolfsberger AC", pick: "1X", odd: "—" },
+            { team1: "HSK Zrinjski", team2: "Breidablik Kopavogur", pick: "1X", odd: "—" },
+            { team1: "FC Lugano", team2: "Celje", pick: "1X", odd: "—" }
+        ]
+    },
+    "05-08-2025": {
+        status: "won",
+        result: "Won",
+        matches: [
+            { team1: "Santos FC SP", team2: "Juventude", pick: "1X", odd: "1.50" },
+            { team1: "Accrington Stanley", team2: "Oldham Athletic", pick: "Over 2", odd: "1.80" },
+            { team1: "Alianza Universidad", team2: "Universitario Deportes", pick: "X2", odd: "1.40" },
+            { team1: "FCB Melgar", team2: "Juan Pablo", pick: "1X", odd: "1.30" }
+        ]
+    },
+    "04-08-2025": {
+        status: "won",
+        result: "Won",
+        matches: [
+            { team1: "Rapid Bucuresti", team2: "FC Botosani", pick: "1X", odd: "1.40" },
+            { team1: "Oriente Petrolero", team2: "Club Aurora", pick: "Over 1.5", odd: "1.50" },
+            { team1: "Always Ready", team2: "CA Nacional Potosi", pick: "1X", odd: "1.35" },
+            { team1: "Tampereen IIves", team2: "IF Gnistan", pick: "Over 1.5", odd: "1.60" }
+        ]
+    },
+    "03-08-2025": {
+        status: "won",
+        result: "Won",
+        matches: [
+            { team1: "EC Vitoria BA", team2: "SE Palmeiras EC", pick: "X2", odd: "1.30" },
+            { team1: "Union Saint Gilloise", team2: "Oud Heverlee Leuven", pick: "Over 1.5", odd: "1.45" },
+            { team1: "Royal Charleroi SC", team2: "SC Truiden", pick: "Over 1.5", odd: "1.50" },
+            { team1: "SP Rapid Wein", team2: "Blau Weiss Linz", pick: "1X", odd: "1.40" }
+        ]
+    },
+    "02-08-2025": {
+        status: "won",
+        result: "Won",
+        matches: [
+            { team1: "Motherwell FC", team2: "Rangers", pick: "Over 1.5", odd: "1.35" },
+            { team1: "Yunnan Yukun", team2: "Shanghai Shenhua", pick: "X2", odd: "1.30" },
+            { team1: "Meizhou Hakka", team2: "Shanghai Port FC", pick: "X2", odd: "1.40" },
+            { team1: "IFK Varnamo", team2: "GAIS", pick: "Over 1.5", odd: "1.55" }
+        ]
+    },
+    "01-08-2025": {
+        status: "lost",
+        result: "Lost (1/4)",
+        matches: [
+            { team1: "Club Do Remo", team2: "Ferroviaria SP", pick: "1X", odd: "1.45" },
+            { team1: "FC Farul Constanta", team2: "Metaloglobus Bucuresti", pick: "Home Win Either Half", odd: "1.70" },
+            { team1: "Cubh Ramblers", team2: "Lonford Town", pick: "1X", odd: "1.35" },
+            { team1: "FC Rukh Lviv", team2: "SC Poltava", pick: "Under 3.5", odd: "1.40" }
+        ]
+    }
+};
 
         // Function to calculate combined odds (minimum 4.00)
         function calculateCombinedOdds(matches) {
