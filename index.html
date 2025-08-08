@@ -509,11 +509,21 @@
         document.querySelector(`.theme-btn[data-theme="${savedTheme}"]`).classList.add('active');
         document.body.className = savedTheme + '-mode';
 
-  // Match data grouped by date
+   // Match data grouped by date
 const matchesByDate = {
-    "07-08-2025": {
+    "08-08-2025": {
         status: "pending",
         result: "Pending",
+        matches: [
+            { team1: "Den Bosch", team2: "Jong Ajax", pick: "1X", odd: "—" },
+            { team1: "CD Palestino", team2: "Deportes Iquique", pick: "1X", odd: "—" },
+            { team1: "Derry City FC", team2: "Cork City FC", pick: "1X", odd: "—" },
+            { team1: "Cerro Porteno", team2: "Nacional Asuncion", pick: "1X", odd: "—" }
+        ]
+    },
+    "07-08-2025": {
+        status: "lost",
+        result: "Lost (3/4)",
         matches: [
             { team1: "CFR 1907 Cluj", team2: "SC Braga", pick: "X2", odd: "—" },
             { team1: "PAOK Thessaloniki", team2: "Wolfsberger AC", pick: "1X", odd: "—" },
