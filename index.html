@@ -593,14 +593,14 @@ const matchesByDate = {
     }
 };
 
-        // Function to calculate combined odds (minimum 4.00)
+        // Function to calculate combined odds (minimum 3.00)
         function calculateCombinedOdds(matches) {
             let combinedOdds = 1;
             matches.forEach(match => {
                 combinedOdds *= parseFloat(match.odd) || 1.5;
             });
-            // Ensure minimum odds of 4.00
-            return Math.max(combinedOdds, 4.00).toFixed(2);
+            // Ensure minimum odds of 3.00
+            return Math.max(combinedOdds, 3.00).toFixed(2);
         }
 
         // Function to create coupon cards
