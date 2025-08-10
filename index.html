@@ -511,9 +511,19 @@
 
    // Match data grouped by date
 const matchesByDate = {
-    "09-08-2025": {
+    "10-08-2025": {
         status: "pending",
         result: "Pending",
+        matches: [
+            { team1: "Crystal Palace", team2: "Liverpool Fc", pick: "X2", odd: "—" },
+            { team1: "Ajax Amsterdam", team2: "SC Telstar", pick: "1", odd: "—" },
+            { team1: "AZ Alkmaar", team2: "FC Groningen", pick: "1X", odd: "—" },
+            { team1: "FC Midtjylland", team2: "FC Fredericia", pick: "1X", odd: "—" }
+        ]
+    },
+    "09-08-2025": {
+        status: "won",
+        result: "Won",
         matches: [
             { team1: "Sao Paulo", team2: "EC Vitoria", pick: "1X", odd: "—" },
             { team1: "Club Brugge", team2: "Cercle Brugge", pick: "1X", odd: "—" },
@@ -533,7 +543,7 @@ const matchesByDate = {
     },
     "07-08-2025": {
         status: "lost",
-        result: "Lost (1/4)",
+        result: "Lost (3/4)",
         matches: [
             { team1: "CFR 1907 Cluj", team2: "SC Braga", pick: "X2", odd: "—" },
             { team1: "PAOK Thessaloniki", team2: "Wolfsberger AC", pick: "1X", odd: "—" },
