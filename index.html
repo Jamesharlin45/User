@@ -613,15 +613,22 @@ const matchesByDate = {
     }
 };
 
-        // Function to calculate combined odds (minimum 3.00)
-        function calculateCombinedOdds(matches) {
-            let combinedOdds = 1;
-            matches.forEach(match => {
-                combinedOdds *= parseFloat(match.odd) || 1.5;
-            });
-            // Ensure minimum odds of 3.00
-            return Math.max(combinedOdds, 3.00).toFixed(2);
-        }
+        // Function to calculate combined odds (minimum 3.00, maximum 4.00, randomised)
+function calculateCombinedOdds(matches) {
+    let combinedOdds = 1;
+    matches.forEach(match => {
+        // Random odd between 1.20 and 2.00 if not provided
+        const randomOdd = (Math.random() * 0.8 + 1.2).toFixed(2);
+        const oddValue = parseFloat(match.odd) || parseFloat(randomOdd);
+        combinedOdds *= oddValue;
+        match.odd = oddValue; // update the match's displayed odd
+    });
+
+    // Clamp between 3.00 and 4.00
+    combinedOdds = Math.min(Math.max(combinedOdds, 3.00), 4.00);
+
+    return combinedOdds.toFixed(2);
+}
 
         // Function to create coupon cards
         function createCouponCards() {
