@@ -511,9 +511,19 @@
 
    // Match data grouped by date
 const matchesByDate = {
-    "12-08-2025": {
+    "13-08-2025": {
         status: "pending",
         result: "Pending",
+        matches: [
+            { team1: "Barnsley", team2: "Fleetwood Town", pick: "1X", odd: "—" },
+            { team1: "Bolton Wanderers", team2: "Sheffield Wednesday", pick: "Over 1.5", odd: "—" },
+            { team1: "Huddersfields Town", team2: "Leicester City", pick: "Over 1.5", odd: "—" },
+            { team1: "Cheltenham Town", team2: "Exeter City", pick: "Over 1.5", odd: "—" }
+        ]
+    },
+    "12-08-2025": {
+        status: "won",
+        result: "Won",
         matches: [
             { team1: "FC Copenhagen", team2: "Malmo FF", pick: "1X", odd: "—" },
             { team1: "FC Vitoria Plzen", team2: "Glasgow Rangers", pick: "Over 1.5", odd: "—" },
@@ -523,7 +533,7 @@ const matchesByDate = {
     },
     "11-08-2025": {
         status: "lost",
-        result: "Lost (1/4)",
+        result: "Lost (3/4)",
         matches: [
             { team1: "Trapzonspor", team2: "Kocaelispor", pick: "1X", odd: "—" },
             { team1: "FC Porto", team2: "Vitoria SC", pick: "1X", odd: "—" },
